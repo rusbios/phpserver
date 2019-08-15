@@ -1,0 +1,4 @@
+FROM            nginx:alpine
+MAINTAINER      Rustam Rasulov <info@rusbios.ru>
+RUN             ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime && echo Europe/Moscow > /etc/timezone
+COPY            config/web/santa.conf /etc/nginx/conf.d/default.conf

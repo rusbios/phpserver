@@ -1,0 +1,52 @@
+version: '3.4'
+
+services:
+
+  db:
+    image: mysql
+    env_file:
+      - php/.env
+    environment:
+      TZ: Europe/Moscow
+    hostname: db
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  php:
+    build:
+      context: build
+      dockerfile: php
+      args:
+        PHP_VERSION: 7.3
+      target: php
+    env_file:
+      - php/.env
+    hostname: php
+    volumes:
+      - ./php:/project:cached
+      - ~/.composer:/usr/local/share/composer:cached
+    links:
+      - db
+    depends_on:
+      - db
+
+  web:
+    build:
+      context: build
+      dockerfile: web
+    env_file:
+      - php/.env
+    hostname: web
+    ports:
+      - 80:80
+    volumes:
+      - ./php:/project:cached
+    links:
+      - php
+    depends_on:
+      - php
+
+volumes:
+  mysql:

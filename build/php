@@ -1,0 +1,27 @@
+# Base container with PHP
+FROM            debian:testing as php
+MAINTAINER      Rustam Rasulov <info@rusbios.ru>
+RUN             ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime && echo Europe/Moscow > /etc/timezone
+WORKDIR         /project
+ARG             PHP_VERSION
+RUN             apt-get update; \
+                PHP_EXTENSIONS="common curl intl mbstring zip bcmath fpm mysql xml"; \
+                DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --no-install-suggests \
+                readline-common less vim \
+                cron curl \
+                php${PHP_VERSION} $(for p in $(echo ${PHP_EXTENSIONS}); do echo php${PHP_VERSION}-${p}; done) \
+                unzip; \
+                DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --no-install-suggests \
+                composer phpunit
+RUN             echo '"\e[A":history-search-backward' >> /etc/inputrc; \
+                echo '"\e[B":history-search-forward' >> /etc/inputrc; \
+                echo '${STARTUP}' >> /etc/bash.bashrc; \
+                echo 'if [ ! -z ${PS1} ] && [ -f /root/.user ] && [ "root" != "$(cat /root/.user)" ]; then su $(cat /root/.user); exit 0; fi' >> /root/.bashrc
+COPY            config/php/bin/ /usr/local/bin/
+CMD             ["/usr/local/bin/docker-entrypoint.sh"]
+
+# FPM related operations
+COPY            config/php/php-fpm.conf /etc/php/fpm/pool.d/www.conf
+RUN             ln -sfT /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm; \
+                mkdir -p /etc/php/${PHP_VERSION}/fpm/pool.d; \
+                ln -sfT /etc/php/fpm/pool.d/www.conf /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
