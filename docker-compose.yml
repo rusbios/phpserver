@@ -5,7 +5,7 @@ services:
   db:
     image: mysql
     env_file:
-      - php/.env
+      - web/.env
     environment:
       TZ: Europe/Moscow
     hostname: db
@@ -37,7 +37,7 @@ services:
       context: build
       dockerfile: web
     env_file:
-      - php/.env
+      - web/.env
     hostname: web
     ports:
       - 80:80
