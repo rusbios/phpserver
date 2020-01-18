@@ -1,0 +1,31 @@
+{
+    "name": "rusbios/laravel-modules",
+    "description": "RusBios custom Laravel modules",
+    "authors": [
+        {
+            "name": "Ryssia",
+            "email": "info@rusbios.ru"
+        }
+    ],
+    "version": "0.1",
+    "homepage": "https://rusbios.ru/",
+    "require": {
+        "php": "^7.2",
+        "laravel/framework": "^6.2",
+        "ext-json": "*",
+        "ext-posix": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "RusBios\\Modules\\": "src/"
+        },
+        "classmap": []
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "RusBios\\Modules\\ModuleServiceProvider"
+            ]
+        }
+    }
+}
