@@ -3,7 +3,7 @@ version: '3.4'
 services:
 
   db:
-    image: mysql
+    image: mysql:8.0
     env_file:
       - php/.env
     environment:

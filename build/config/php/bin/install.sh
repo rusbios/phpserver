@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
-WD=$1
-
 composer config --global cache-dir /usr/local/share/composer/cache
 
-if [ "$WD" != "" ]; then
-    cd $WD
-    composer install --ignore-platform-reqs
-else
-    composer install --no-dev --prefer-dist
+if [ ! -f ./composer.json ]; then
+  composer global require laravel/installer
+  composer create-project --prefer-dist laravel/laravel .
+  cp ../packages/.env.example ./.env
+  cp ../packages/composer.json composer.json
+  cp ../packages/composer.lock composer.lock
+  php artisan key:generate
+  php artisan migrate
 fi
+
+composer install

@@ -1,11 +1,11 @@
 # Base container with PHP
-FROM            debian:testing as php
+FROM            debian:stable-slim as php
 MAINTAINER      Rustam Rasulov <info@rusbios.ru>
 RUN             ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime && echo Europe/Moscow > /etc/timezone
 WORKDIR         /project
 ARG             PHP_VERSION
 RUN             apt-get update; \
-                PHP_EXTENSIONS="common curl intl mbstring zip bcmath fpm mysql xml"; \
+                PHP_EXTENSIONS="common curl intl mbstring zip bcmath fpm mysql xml sqlite"; \
                 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --no-install-suggests \
                 readline-common less vim \
                 cron curl \
