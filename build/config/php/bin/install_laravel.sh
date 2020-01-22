@@ -12,4 +12,8 @@ if [ ! -f ./composer.json ]; then
   php artisan migrate
 fi
 
-composer install
+if [ $1 != "" ]; then
+    composer install
+else
+    composer install --no-dev
+fi

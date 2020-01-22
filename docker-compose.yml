@@ -3,7 +3,7 @@ version: '3.4'
 services:
 
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     env_file:
       - php/.env
     environment:
@@ -20,12 +20,14 @@ services:
       dockerfile: php
       args:
         PHP_VERSION: 7.3
+        PHP_EXTENSIONS: "common curl intl mbstring zip bcmath fpm mysql xml"
       target: php
     env_file:
       - php/.env
     hostname: php
     volumes:
-      - ./php:/project:cached
+      - ../shurisu:/project:cached
+      - ./php/packages:/packages:cached
       - ~/.composer:/usr/local/share/composer:cached
     links:
       - db
@@ -42,7 +44,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./php:/project:cached
+      - ../shurisu:/project:cached
     links:
       - php
     depends_on:
