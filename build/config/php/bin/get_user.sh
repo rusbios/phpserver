@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-GROUP_ID=$(stat -c %g composer.json)
+GROUP_ID=$(stat -c %g ../packages/composer.json)
 GROUP_NAME=$(getent group $GROUP_ID | awk -F: '{print $1}')
 if [ ! -z $GROUP_ID ] && [ -z $GROUP_NAME ]; then
     GROUP_NAME=user
@@ -8,7 +8,7 @@ if [ ! -z $GROUP_ID ] && [ -z $GROUP_NAME ]; then
     chgrp ${GROUP_NAME} /usr/local/share/composer
 fi
 
-USER_ID=$(stat -c %u composer.json)
+USER_ID=$(stat -c %u ../packages/composer.json)
 USER_NAME=$(id -nu $USER_ID)
 if [ ! -z $USER_ID ] && [ -z $USER_NAME ]; then
     USER_NAME=user
